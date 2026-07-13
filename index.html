@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CNC Devir ve İlerleme Hesaplayıcı</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <section id="cnc-hiz-hesaplayici" aria-label="CNC torna ve freze hesaplayıcı">
+
+
+        <main class="wrap">
+            <header class="intro">
+                <p class="eyebrow">Basit CNC ayarları</p>
+                <h1>Devir ve ilerleme hesaplayıcı</h1>
+                <p class="lead">Sadece gerekli değerleri girin. Hesaplanan devir ve ilerleme hızını tezgâha girmeden
+                    önce kontrol edin.</p>
+                <div class="steps" aria-label="Kullanım adımları"><span><b>1</b> Operasyonu seç</span><span><b>2</b>
+                        Değerleri gir</span><span><b>3</b> Hesapla</span></div>
+            </header>
+
+            <section class="card calculator" aria-labelledby="form-heading">
+                <div class="mode-switch" role="tablist" aria-label="Operasyon türü">
+                    <button class="mode" id="turning-tab" type="button" role="tab" aria-selected="true"
+                        aria-controls="turning-form">Torna</button>
+                    <button class="mode" id="milling-tab" type="button" role="tab" aria-selected="false"
+                        aria-controls="milling-form">Freze</button>
+                </div>
+
+                <div class="material-row">
+                    <div class="field">
+                        <label for="material-select">İşlenecek malzeme <span>isteğe bağlı</span></label>
+                        <select id="material-select">
+                            <option value="">Malzeme seçin veya katalog değerinizi girin</option>
+                            <optgroup label="Alüminyum ve hafif metaller">
+                                <option value="Alüminyum 1050 / yumuşak" data-turning="320" data-milling="360">Alüminyum
+                                    1050 / yumuşak</option>
+                                <option value="Alüminyum 6061 / 6082" data-turning="280" data-milling="300">Alüminyum
+                                    6061 / 6082</option>
+                                <option value="Alüminyum 7075" data-turning="220" data-milling="240">Alüminyum 7075
+                                </option>
+                                <option value="Magnezyum" data-turning="350" data-milling="400">Magnezyum</option>
+                                <option value="Çinko alaşımı" data-turning="180" data-milling="200">Çinko alaşımı
+                                </option>
+                            </optgroup>
+                            <optgroup label="Çelik ve paslanmaz">
+                                <option value="Düşük karbon çelik (ST37 / 1018)" data-turning="180" data-milling="160">
+                                    Düşük karbon çelik (ST37 / 1018)</option>
+                                <option value="Orta karbon çelik (C45 / 1045)" data-turning="140" data-milling="130">
+                                    Orta karbon çelik (C45 / 1045)</option>
+                                <option value="Alaşımlı çelik (4140 / 42CrMo4)" data-turning="110" data-milling="100">
+                                    Alaşımlı çelik (4140 / 42CrMo4)</option>
+                                <option value="Takım çeliği" data-turning="80" data-milling="70">Takım çeliği</option>
+                                <option value="Paslanmaz 304" data-turning="100" data-milling="90">Paslanmaz 304
+                                </option>
+                                <option value="Paslanmaz 316" data-turning="80" data-milling="70">Paslanmaz 316</option>
+                                <option value="Paslanmaz 17-4PH" data-turning="85" data-milling="75">Paslanmaz 17-4PH
+                                </option>
+                            </optgroup>
+                            <optgroup label="Döküm ve bakır alaşımları">
+                                <option value="Gri dökme demir" data-turning="180" data-milling="160">Gri dökme demir
+                                </option>
+                                <option value="Sfero döküm" data-turning="140" data-milling="130">Sfero döküm</option>
+                                <option value="Pirinç" data-turning="250" data-milling="240">Pirinç</option>
+                                <option value="Bronz" data-turning="140" data-milling="130">Bronz</option>
+                                <option value="Bakır" data-turning="180" data-milling="160">Bakır</option>
+                            </optgroup>
+                            <optgroup label="Isıya dayanıklı alaşımlar">
+                                <option value="Titanyum (Ti-6Al-4V)" data-turning="55" data-milling="45">Titanyum
+                                    (Ti-6Al-4V)</option>
+                                <option value="Nikel alaşımı (Inconel)" data-turning="35" data-milling="30">Nikel
+                                    alaşımı (Inconel)</option>
+                                <option value="Kobalt alaşımı" data-turning="25" data-milling="22">Kobalt alaşımı
+                                </option>
+                            </optgroup>
+                            <optgroup label="Mühendislik plastikleri">
+                                <option value="POM / Delrin" data-turning="350" data-milling="400">POM / Delrin</option>
+                                <option value="PA6 / Naylon" data-turning="250" data-milling="300">PA6 / Naylon</option>
+                                <option value="PMMA / Akrilik" data-turning="300" data-milling="350">PMMA / Akrilik
+                                </option>
+                                <option value="Polikarbonat" data-turning="220" data-milling="260">Polikarbonat</option>
+                                <option value="PVC" data-turning="180" data-milling="220">PVC</option>
+                                <option value="PE-HD / PP" data-turning="300" data-milling="350">PE-HD / PP</option>
+                                <option value="PTFE / Teflon" data-turning="200" data-milling="250">PTFE / Teflon
+                                </option>
+                            </optgroup>
+                            <optgroup label="Ahşap ve levha">
+                                <option value="Masif ahşap" data-turning="700" data-milling="900">Masif ahşap</option>
+                                <option value="Kontrplak / MDF" data-turning="600" data-milling="800">Kontrplak / MDF
+                                </option>
+                            </optgroup>
+                            <optgroup label="Diğer">
+                                <option value="Kompozit / karbon fiber" data-turning="0" data-milling="0">Kompozit /
+                                    karbon fiber — katalog değeri kullanın</option>
+                                <option value="Diğer / özel malzeme" data-turning="0" data-milling="0">Diğer / özel
+                                    malzeme — katalog değeri kullanın</option>
+                            </optgroup>
+                        </select>
+                        <p id="material-note" class="field-help">Karbit takım için kaba başlangıç önerisi sunar; üretici
+                            kataloğu önceliklidir.</p>
+                    </div>
+                    <button id="apply-material-button" class="material-button" type="button">Önerilen kesme hızını
+                        yaz</button>
+                </div>
+
+                <form id="turning-form" role="tabpanel" aria-labelledby="turning-tab" novalidate>
+                    <div class="form-title">
+                        <h2 id="form-heading">Torna için değerler</h2>
+                        <p class="quiet">Örnekler silik gösterilir.</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="field"><label for="turning-vc">Kesme hızı <span>m/dk</span></label><input
+                                id="turning-vc" type="number" min="0.1" step="1" inputmode="decimal"
+                                placeholder="Örnek: 180">
+                            <p class="field-help">Takımın malzemeyi keseceği hızdır.</p>
+                        </div>
+                        <div class="field"><label for="turning-diameter">Parça çapı <span>mm</span></label><input
+                                id="turning-diameter" type="number" min="0.1" step="0.1" inputmode="decimal"
+                                placeholder="Örnek: 50">
+                            <p class="field-help">Takımın kestiği yüzeydeki anlık çap.</p>
+                        </div>
+                        <div class="field"><label for="turning-feed">İlerleme / devir <span>mm/dev</span></label><input
+                                id="turning-feed" type="number" min="0.001" step="0.01" inputmode="decimal"
+                                placeholder="Örnek: 0,20">
+                            <p class="field-help">Takımın bir turda gittiği mesafe.</p>
+                        </div>
+                    </div>
+                    <div class="optional">
+                        <div class="form-grid">
+                            <div class="field"><label for="turning-length">İşleme boyu <span>mm · süre
+                                        için</span></label><input id="turning-length" type="number" min="0" step="1"
+                                    inputmode="decimal" placeholder="Örnek: 100">
+                                <p class="field-help">Takımın malzeme üzerindeki gidiş yolu.</p>
+                            </div>
+                            <div class="field"><label for="turning-max">Tezgâh maksimum devri <span>dev/dk · isteğe
+                                        bağlı</span></label><input id="turning-max" type="number" min="1" step="100"
+                                    inputmode="numeric" placeholder="Örnek: 3000">
+                                <p class="field-help">Tezgâhın ulaşabildiği en yüksek devir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <form id="milling-form" role="tabpanel" aria-labelledby="milling-tab" novalidate hidden>
+                    <div class="form-title">
+                        <h2>Freze için değerler</h2>
+                        <p class="quiet">Örnekler silik gösterilir.</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="field"><label for="milling-vc">Kesme hızı <span>m/dk</span></label><input
+                                id="milling-vc" type="number" min="0.1" step="1" inputmode="decimal"
+                                placeholder="Örnek: 220">
+                            <p class="field-help">Takımın malzemeyi keseceği hızdır.</p>
+                        </div>
+                        <div class="field"><label for="milling-diameter">Takım çapı <span>mm</span></label><input
+                                id="milling-diameter" type="number" min="0.1" step="0.1" inputmode="decimal"
+                                placeholder="Örnek: 10">
+                            <p class="field-help">Kullandığınız freze takımının çapı.</p>
+                        </div>
+                        <div class="field"><label for="milling-fz">İlerleme / diş <span>mm/diş</span></label><input
+                                id="milling-fz" type="number" min="0.001" step="0.01" inputmode="decimal"
+                                placeholder="Örnek: 0,08">
+                            <p class="field-help">Her kesici ağzın bir turdaki ilerlemesi.</p>
+                        </div>
+                        <div class="field"><label for="milling-teeth">Takım diş sayısı <span>adet · isteğe
+                                    bağlı</span></label><input id="milling-teeth" type="number" min="1" step="1"
+                                inputmode="numeric" placeholder="Varsa: 4">
+                            <p class="field-help">Takımdaki kesici ağız sayısıdır; sadece frezede kullanılır.</p>
+                        </div>
+                    </div>
+                    <div class="optional">
+                        <div class="form-grid">
+                            <div class="field"><label for="milling-length">İşleme boyu <span>mm · süre
+                                        için</span></label><input id="milling-length" type="number" min="0" step="1"
+                                    inputmode="decimal" placeholder="Örnek: 100">
+                                <p class="field-help">Takımın malzeme üzerinde gideceği yol.</p>
+                            </div>
+                            <div class="field"><label for="milling-max">Tezgâh maksimum devri <span>dev/dk · isteğe
+                                        bağlı</span></label><input id="milling-max" type="number" min="1" step="100"
+                                    inputmode="numeric" placeholder="Örnek: 12000">
+                                <p class="field-help">Tezgâhın ulaşabildiği en yüksek devir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="action-row"><button id="calculate-button" class="calculate"
+                        type="button">Hesapla</button><button id="example-button" class="example" type="button">Örnek
+                        değerleri doldur</button></div>
+                <p id="error-message" class="error" role="alert"></p>
+
+                <section id="result-box" class="result" aria-live="polite" aria-labelledby="result-heading">
+                    <div class="result-head">
+                        <h2 id="result-heading">Hesap sonucu</h2>
+                        <p id="result-mode">Torna ayarları</p>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-value"><span>İş mili devri</span><b id="rpm-value">—</b></div>
+                        <div class="result-value"><span>İlerleme hızı</span><b id="feed-value">—</b></div>
+                        <div class="result-value"><span>Tahmini kesim süresi</span><b id="time-value">—</b></div>
+                    </div>
+                    <p id="limit-warning" class="warning">Tezgâhın maksimum devri uygulandı. Bu nedenle gerçek kesme
+                        hızı hedef değerden daha düşük olabilir.</p>
+                    <p id="tooth-note" class="warning">İlerleme hızı için freze takımının diş sayısını girin. Bu sayı
+                        tezgâha değil, kullandığınız freze takımına aittir.</p>
+                </section>
+            </section>
+
+            <section class="card info" aria-labelledby="info-heading">
+                <h2 id="info-heading">Kısa bilgi: İşleme boyunu nasıl ölçmeliyim?</h2>
+                <p>İşleme boyu, bağlama aparatının ölçüsü değil; takımın malzeme üzerinde gerçekten ilerleyeceği
+                    mesafedir.</p>
+                <p class="safety"><strong>Takım dişi nedir?</strong> Freze takımının üzerindeki kesici ağız sayısıdır.
+                    Tezgâhın özelliği değildir; kullandığınız takıma göre değişir. Torna hesabında kullanılmaz. Freze
+                    ilerleme hızını hesaplamak için biliyorsanız girin; bilmiyorsanız boş bırakabilirsiniz.</p>
+                <div class="info-grid">
+                    <article class="info-item">
+                        <h3>Tornada (ayna ile bağlama)</h3>
+                        <p>Aynaya sıkılan kısım hesaplamaya girmez. Takımın parça üzerinde başlangıç noktasından bitiş
+                            noktasına gideceği boyu girin. Giriş ve çıkış için gerekliyse küçük bir pay ekleyin.</p>
+                    </article>
+                    <article class="info-item">
+                        <h3>Frezede (mengene ile bağlama)</h3>
+                        <p>Mengene çeneleri arasındaki toplam parça boyunu değil, frezenin keseceği yolu girin. Takımın
+                            malzemeye yaklaşma ve çıkma mesafelerini de eklemeyi unutmayın.</p>
+                    </article>
+                    <article class="info-item">
+                        <h3>Süre sonucu neyi gösterir?</h3>
+                        <p>Bu süre yalnızca kesme hareketidir. Takım değiştirme, ölçüm, bağlama ve rapid hareketler
+                            süreye dahil değildir.</p>
+                    </article>
+                </div>
+                <p class="safety"><strong>Güvenlik notu:</strong> Bu sonuçlar başlangıç değeridir. Takım üreticisinin
+                    önerisini, malzemeyi ve bağlama rijitliğini kontrol edin; ilk denemede düşük ilerleme ve boşta prova
+                    tercih edin.</p>
+            </section>
+        </main>
+
+
+    </section>
+</body>
+
+</html>
