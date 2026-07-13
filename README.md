@@ -1,0 +1,1 @@
+Doğruluğu teyit edilecek!
